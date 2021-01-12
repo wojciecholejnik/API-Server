@@ -74,7 +74,6 @@ router.route('/concerts/:id').put(upload.single('image'),(req, res) => {
 
 router.route('/concerts/:id').delete((req, res) => {
   const toDelete = db.concerts.filter(item => item.id == req.params.id);
-  console.log("toDel: ", toDelete);
   db.concerts.splice(toDelete, 1);
   res.json(message);
 });

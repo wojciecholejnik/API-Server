@@ -4,8 +4,6 @@ const app = express();
 const db = require('../db');
 const message = 'OK';
 const { v4: uuidv4 } = require('uuid');
-const multer = require('multer');
-const upload = multer();
 
 
 app.use(express.urlencoded({ extended: false }));
@@ -30,26 +28,31 @@ router.route('/seats/:id').get((req, res) => {
   }
 });
 
-router.route('/seats/random').get((req, res) => {
-  res.json(db.seats.filter(item => item.id === 1));
-});
 
 router.route('/seats').post((req, res) => {
   const { client, seat, email, day } = req.body;
-  if(client && seat && email && day ) {
-    db.seats.push({
-      id: uuidv4(),
-      day: day,
-      seat: seat,
-      client: client,
-      email: email,
-    });
+  
+  const seatBooked = db.seats.find(item => item.day == req.body.day && item.seat == req.body.seat);
+
+  if (seatBooked) {
+      res.status(403).json({ message: 'The slot is already taken...' });
   } else {
-    res.json('complete all fields')
+    if(client && seat && email && day ) {
+      db.seats.push({
+        id: uuidv4(),
+        day: day,
+        seat: seat,
+        client: client,
+        email: email,
+      });
+    } else {
+      res.json('complete all fields')
+    }
   }
 
   return res.json(message);
 });
+
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -70,7 +73,6 @@ router.route('/seats/:id').put((req, res) => {
 
 router.route('/seats/:id').delete((req, res) => {
   const toDelete = db.seats.filter(item => item.id == req.params.id);
-  console.log("toDel: ", toDelete);
   db.seats.splice(toDelete, 1);
   res.json(message);
 });
