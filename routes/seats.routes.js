@@ -31,20 +31,20 @@ router.route('/seats/:id').get((req, res) => {
 
 router.route('/seats').post((req, res) => {
   const { client, seat, email, day } = req.body;
-  
   const seatBooked = db.seats.find(item => item.day == req.body.day && item.seat == req.body.seat);
 
   if (seatBooked) {
       res.status(403).json({ message: 'The slot is already taken...' });
-  } else {
-    if(client && seat && email && day ) {
-      db.seats.push({
-        id: uuidv4(),
-        day: day,
-        seat: seat,
-        client: client,
-        email: email,
-      });
+    } else {
+      if(client && seat && email && day ) {
+        db.seats.push({
+          id: uuidv4(),
+          day: day,
+          seat: seat,
+          client: client,
+          email: email,
+        });
+        req.io.emit('seatsUpdated', db.seats);
     } else {
       res.json('complete all fields')
     }
