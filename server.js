@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://wwwojtasss:wwwojtasss@cluster0.bpoyn.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
