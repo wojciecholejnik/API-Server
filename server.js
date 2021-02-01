@@ -4,8 +4,10 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://wwwojtasss:wwwojtasss@cluster0.bpoyn.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true });
+const dbURI = process.env.NODE_ENV === 'production' ? 'mongodb://localhost:27017/NewWaveDB' : 'mongodb+srv://wwwojtasss:wwwojtasss@cluster0.bpoyn.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
+
 
 db.once('open', () => {
   console.log('Connected to the database');
@@ -47,4 +49,4 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '/client/build/index.html'));
 });
 
-
+module.exports = server;
