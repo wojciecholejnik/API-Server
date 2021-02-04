@@ -4,11 +4,8 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
-const aws = require('aws-sdk');
 
-const hiddenURL = new aws.S3({url : process.env.DATABASE_URL});
-
-const dbURI = process.env.NODE_ENV === 'production' ? 'mongodb://localhost:27017/NewWaveDB' : hiddenURL.url;
+const dbURI = process.env.NODE_ENV === 'production' ? 'mongodb://localhost:27017/NewWaveDB' : process.env.DATABASE_URL;
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
