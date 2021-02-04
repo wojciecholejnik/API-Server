@@ -4,7 +4,11 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
-const dbURI = process.env.NODE_ENV === 'production' ? 'mongodb://localhost:27017/NewWaveDB' : 'mongodb+srv://wwwojtasss:wwwojtasss@cluster0.bpoyn.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+const aws = require('aws-sdk');
+
+const hiddenURL = new aws.S3({url : process.env.DATABASE_URL});
+
+const dbURI = process.env.NODE_ENV === 'production' ? 'mongodb://localhost:27017/NewWaveDB' : hiddenURL.DATABASE_URL;
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
@@ -16,6 +20,7 @@ db.on('error', err => console.log('Error ' + err));
 
 
 const server = app.listen(process.env.PORT || 8000, () => {
+  console.log('proces.env: ', process.env);
   console.log('Server is running on port: 8000');
 });
 const io = socket(server);

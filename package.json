@@ -6,12 +6,13 @@
   "scripts": {
     "start": "nodemon server.js",
     "build": "cd client && yarn install && yarn build",
-    "test": "NODE_ENV=production mocha /Users/wojtas/Desktop/Kodilla/27.5/test/api/concerts/get.test.js",
+    "test": "NODE_ENV=production mocha \"./{,!(node_modules|client)/**/}*.test.js\"",
     "test:watch": "onchange \"./**/*.js\" -i -k -- yarn test"
   },
   "dependencies": {
     "@babel/helper-builder-react-jsx": "^7.10.4",
     "@babel/helper-regex": "^7.10.5",
+    "aws-sdk": "^2.836.0",
     "axios": "0.18.0",
     "bootstrap": "^4.3.1",
     "chai": "4.2.0",
