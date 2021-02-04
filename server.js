@@ -4,9 +4,12 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 
-const dbURI = process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : 'mongodb://localhost:27017/NewWaveDB';
+// const dbURI = process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : 'mongodb://localhost:27017/NewWaveDB';
+const dbURI = 'mongodb://localhost:27017/NewWaveDB';
+// const dbURI = 'mongodb+srv://wwwojtasss:wwwojtasss@cluster0.bpoyn.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
@@ -18,7 +21,6 @@ db.on('error', err => console.log('Error ' + err));
 
 
 const server = app.listen(process.env.PORT || 8000, () => {
-  console.log('proces.env: ', dbURI);
   console.log('Server is running on port: 8000');
 });
 const io = socket(server);
@@ -28,6 +30,7 @@ app.use((req, res, next) => {
   req.socket = socket;
   next();
 });
+app.use(helmet());
 
 const testimonialsRoutes = require('./routes/testimonials.routes');
 const concertsRoutes = require('./routes/concerts.routes');

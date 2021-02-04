@@ -1,4 +1,5 @@
 const Testimonials = require('../models/testimonials.model');
+var sanitize = require('mongo-sanitize');
 
 exports.getAll = async (req, res) => {
   try {
@@ -34,9 +35,11 @@ exports.getRandom = async (req, res) => {
 };
 
 exports.post = async (req, res) => {
+  const { author, text } = sanitize(req.body);
   try {
-    const { author, text } = req.body;
-    const newTestimonials = new Testimonials({ author: author, text: text });
+    const cleanAuthor = sanitize(author);
+    const clarText = sanitize(text);
+    const newTestimonials = new Testimonials({ author: cleanAuthor, text: clarText });
     await newTestimonials.save();
     res.json({ message: 'OK' });
 
